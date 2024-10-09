@@ -8,13 +8,19 @@
 </head>
 
 <body>
-  <form>
+
+  <form action="login.php" method="post">
     <fieldset>
       <legend>Let's log!</legend>
-      <label for="user">User</label>
-      <input type="text" id="user" name="user"><br>
-      <label for="password"></label>
-      <input type="text" id="password" name="password">
+
+      <label for="user">Email adress</label><br>
+      <input type="email" id="user" name="user"><br>
+
+      <label for="password">Password</label><br>
+      <input type="password" id="password" name="password">
+
+      <button type="submit">Login</button>
+
     </fieldset>
   </form>
 </body>
