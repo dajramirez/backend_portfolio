@@ -14,10 +14,10 @@
       <legend>Let's log!</legend>
 
       <label for="user">Email adress</label><br>
-      <input type="email" id="user" name="user"><br>
+      <input type="email" id="user" name="user" required><br>
 
       <label for="password">Password</label><br>
-      <input type="password" id="password" name="password">
+      <input type="password" id="password" name="password" required>
 
       <button type="submit">Login</button>
 
