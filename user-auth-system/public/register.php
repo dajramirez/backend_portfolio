@@ -4,6 +4,26 @@ require_once '../includes/config.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
   $password = $_POST['password'];
+
+  //Verificamos si el email ya está en uso
+  $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+  $stmt->execute([$email]);
+
+  if ($stmt->rowCount() > 0) {
+    echo 'Este correo ya está registrado.';
+  } else {
+    // Creamos la contraseña cifrada
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+  }
+
+
+
+  // Insertamos el usuario en la base de datos
+  $stmt = $pdo->prepare('INSERT INTO users (email, password) VALUES (:email, :password)');
+  $stmt->execute(['email' => $email, 'password' => $hashedPassword]);
+
+  header('Location: login.php');
+  exit;
 }
 ?>
 
