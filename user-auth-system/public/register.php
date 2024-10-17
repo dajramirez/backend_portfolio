@@ -14,16 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   } else {
     // Creamos la contraseña cifrada
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    // Insertamos el nuevo usuario
+    $stmt = $pdo->prepare("INSERT INTO users (email, password) VALUES (?,?)");
+    $stmt->execute([$email, $hashedPassword]);
+
+    echo 'Registro completado correctamente. Puedes iniciar sesión.';
   }
-
-
-
-  // Insertamos el usuario en la base de datos
-  $stmt = $pdo->prepare('INSERT INTO users (email, password) VALUES (:email, :password)');
-  $stmt->execute(['email' => $email, 'password' => $hashedPassword]);
-
-  header('Location: login.php');
-  exit;
 }
 ?>
 
@@ -37,9 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
-  <form action="register.php" method="post">
+  <form action="register.php" method="POST">
     <fieldset>
-      <legend>Let's sign up</legend>
+      <legend>Regístrate</legend>
 
       <label for="user">Email adress</label><br>
       <input type="email" id="user" name="user" required><br>
@@ -47,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <label for="password">Password</label><br>
       <input type="password" id="password" name="password" required><br>
 
-      <button type="submit">Sign up</button>
+      <button type="submit">Registrarse</button>
 
     </fieldset>
   </form>
