@@ -1,28 +1,38 @@
+<?php
+session_start();
+
+// Verficamos si el usuario está autenticado
+if (!isset($_SESSION['user_id'])) {
+  // Si no está autenticado, redirigimos al formulario de login
+  header('Location: login.php');
+  exit();
+}
+
+// Obtenemos el usuario actual
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([$_SESSION['user_id']]);
+$user = $stmt->fetch();
+?>
+
 <!DOCTYPE html>
-<html lang="es-ES">
+<html lang="es-EN">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+  <title>Página de inicio - Sistema de Autenticación</title>
 </head>
 
 <body>
 
-  <form action="login.php" method="post">
-    <fieldset>
-      <legend>Let's log!</legend>
+  <h1>Bienvenido a tu panel, <?= htmlspecialchars($user['email']) ?>!</h1>
+  <p>Has iniciado sesión correctamente.</p>
 
-      <label for="user">Email adress</label><br>
-      <input type="email" id="user" name="user" required><br>
-
-      <label for="password">Password</label><br>
-      <input type="password" id="password" name="password" required><br>
-
-      <button type="submit">Login</button>
-
-    </fieldset>
-  </form>
+  <!-- Opciones para el usuario autenticado. -->
+  <ul>
+    <li><a href="profile.php">Ver perfil</a></li>
+    <li><a href="logout.php">Cerrar sesión</a></li>
+  </ul>
 </body>
 
 </html>

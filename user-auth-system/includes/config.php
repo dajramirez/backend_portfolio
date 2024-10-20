@@ -14,7 +14,7 @@ try {
   error_log("Error de conexión: " . $e->getMessage(), 0);
 
   // Mostramos un mensaje genérico al usuario obviando los detalles técnicos
-  if (getenv('APP_ENV') == 'development') {
+  if (getenv('APP_ENV') === 'development') {
     die("Error de conexión: " . $e->getMessage());
   } else {
     die("Lo sentimos, no se pudo conectar a la base de datos. Inténtelo de nuevo más tarde.");
