@@ -10,9 +10,14 @@ if (!isset($_SESSION['user_id'])) {
 
 // Obtenemos el usuario actual
 require_once '../includes/config.php';
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
-$stmt->execute([$_SESSION['user_id']]);
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = :user_id");
+$stmt->bindParam(':user_id', $_SESSION['user_id']);
+$stmt->execute();
 $user = $stmt->fetch();
+
+// Una vez realizado el fetching ya no será necesaria la conexión con la base de datos
+$stmt = null;
+$pdo = null;
 ?>
 
 <!DOCTYPE html>

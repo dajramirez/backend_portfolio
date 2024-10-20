@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+// Si se ha recibido un mensaje de actualización, mostramos un mensaje de éxito
+if (isset($_GET['message']) && $_GET['message'] === 'profile_updated') {
+  echo "<p class='success'><strong>Perfil actualizado. Por favor, inicie sesión nuevamente.</strong></p>";
+}
+
 if (isset($_SESSION['user_id'])) {
   // Si el usuario está autenticado, redireccionamos al index.php
   header('Location: index.php');
