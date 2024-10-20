@@ -9,6 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Obtenemos el usuario actual
+require_once '../includes/config.php';
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch();
