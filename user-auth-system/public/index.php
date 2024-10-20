@@ -1,23 +1,47 @@
 <?php
 session_start();
 
-// Verficamos si el usuario está autenticado
-if (!isset($_SESSION['user_id'])) {
-  // Si no está autenticado, redirigimos al formulario de login
-  header('Location: login.php');
+try {
+  // Verficamos si el usuario está autenticado
+  if (!isset($_SESSION['user_id'])) {
+    // Si no está autenticado, redirigimos al formulario de login
+    header('Location: login.php');
+    exit();
+  }
+
+  // Obtenemos el usuario actual
+  require_once '../includes/config.php';
+
+  $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :user_id");
+  $stmt->bindParam(':user_id', $_SESSION['user_id']);
+  $stmt->execute();
+
+  // Hacemos fetch y  verificamos si el usuario existe
+  $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  if (!$user) {
+    throw new Exception('Usuario no encontrado.');
+  }
+
+  // Regeneramos la ID  de la sesión tras el login exitoso
+  session_regenerate_id(true);
+
+  // Cerramos el statement
+  $stmt = null;
+} catch (PDOException $e) {
+  // Aquí manejamos los errores relacionados con la base de datos
+  echo "Error de base de datos: " . $e->getMessage();
   exit();
+} catch (Exception $e) {
+  // Aquí manejamos los errores generales
+  echo "Error: " . $e->getMessage();
+  exit();
+} finally {
+  // Cerramos la conexión a la base de datos
+  if (isset($pdo)) {
+    $pdo = null;
+  }
 }
-
-// Obtenemos el usuario actual
-require_once '../includes/config.php';
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = :user_id");
-$stmt->bindParam(':user_id', $_SESSION['user_id']);
-$stmt->execute();
-$user = $stmt->fetch();
-
-// Una vez realizado el fetching ya no será necesaria la conexión con la base de datos
-$stmt = null;
-$pdo = null;
 ?>
 
 <!DOCTYPE html>
